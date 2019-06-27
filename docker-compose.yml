@@ -1,10 +1,17 @@
-version: "3"
+version: "2.1"
 services:
   java-testapp:     
     build: ./Java-testapp 
     ports:
       - "8080:8080"  
-    container_name: Java-app
+    container_name: java-app
+    healthcheck:
+      #test: ["CMD", "lsof", "-i:8080"]
+      test: grep -i "Server startup" /usr/local/tomcat/logs/catalina.`date +"%Y-%m-%d"`.log || exit 1
+      #test: ["CMD-SHELL", "grep -i", "Server startup", "/usr/local/tomcat/logs/catalina.`date +"%Y-%m-%d"`"]
+      interval: 5s
+      timeout: 2s
+      retries: 3
 
   selenium-hub:
     image: selenium/hub
@@ -37,4 +44,18 @@ services:
       - /dev/shm:/dev/shm
     ports:
       - "5900:5900"
+
+  selenium-test:
+    build: ./node  
+    restart: always
+    container_name: selenium-test
+    volumes:
+      - ./test:/home/node/test:rw
+      - ./report:/home/node/report:rw
+    depends_on:
+      java-testapp:
+        condition: service_healthy
+
+    working_dir: /home/node/test
+    command : selenium-side-runner Test-session-selenium.side --server http://selenium-hub:4444/wd/hub -c "browserName='chrome'" --output-directory=/home/node/report 
 
