@@ -1,7 +1,5 @@
 # Project to Dockerize Selenium application 
 
-# clone the project 
-
 
 ```docker compose up -d ```
 
