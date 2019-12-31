@@ -21,7 +21,7 @@
       "targets": [
         ["css=body", "css:finder"],
         ["xpath=//body", "xpath:position"],
-        ["xpath=//body[contains(.,'DevOpsArea Java Sample Projects 24.05.2019')]", "xpath:innerText"]
+        ["xpath=//body[contains(.,'DevOpsArea Java Sample Projects')]", "xpath:innerText"]
       ],
       "value": "DevOpsArea Java Sample Projects 11"
     }]
